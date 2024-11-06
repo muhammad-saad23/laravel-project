@@ -3,7 +3,7 @@
 
 <div class="container">
 <div class="row" >
-	@foreach ($display_pro as $ps )
+	@forelse ($display_pro as $ps )
 	<div class="col-lg-3 col-md-6 col-sm-12 mb-5" style="margin-bottom:7rem;">
 		<div class="product mb-">			
 			<div class="product-img">
@@ -16,13 +16,22 @@
 				<h4 class="product-price">{{$ps->pro_price}}</h4>
 				<a href="{{route('product',['pid'=>$ps->pid])}}" class="btn btn-primary">View</a>												
 			</div>
+			<form action="{{route('cart')}}" method="post">
+				@csrf
+				<div class="quantity">
+                <input name="quantity" class="form-control ms-5" type="hidden" min="1" max="{{$ps->quantity}}" value="1">
+              </div>
+				<input  type="hidden" name="id" value="{{$ps->pid}}">
 			<div class="add-to-cart">
-            	<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+            	<button type="submit" name="addtocart" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
 			</div>
+			</form>
 		</div>
 	</div>
-									
-		@endforeach
+		@empty
+		<h2 class="text-center" style="display:flex; justify-content:center;align-items:center;height: 9em;font-size:3rem;">No Result Founds.</h2>							
+				
+		@endforelse
 	</div>
 	<div class="row" style="display:flex;justify-content:center;">
 

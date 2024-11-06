@@ -41,26 +41,42 @@ class ProductController extends Controller
     public function productView(Request $request){
         // search
         $search=$request['search'] ??"" ;
-        if ($search != "" ) {
-            $pro_view=product::join('category','cat_id','=','category.cid')
-            ->where('pro_name','LIKE',"%$search%")->orWhere('cat_name','LIKE',"%$search%")->paginate();                                
-        }
-        else{
-            $pro_view=product::join('category','cat_id','=','category.cid')->paginate();        
-        }
+        // if ($search != "") {
+        //     $pro_view=product::join('category','cat_id','=','category.cid')
+        //     ->where('pro_name','LIKE',"%$search%")->orWhere('cat_name','LIKE',"%$search%")->paginate(2);                                
 
+        // }
+        // else{
+        //     $pro_view=product::join('category','cat_id','=','category.cid')->paginate();        
+        // }
+        
+        // $query=product::query();
         // filter        
         $categories=category::all();
         $filter=product::query();
-
         if ($request->ajax()) {
-            $products->where(['cat_id'=>$request->filter])->get();
-            return response()->json(['products'=>$products]);
+
+            if (empty($request->category)) {
+                $pro_view=$filter->get();                                
+            }
+            else {
+                $pro_view=$filter->join('category','cat_id','=','category.cid')
+                ->where(['cat_id'=>$request->category])->get();                
+            }
+                            
+            return response()->json(['products'=>$pro_view]);
         }
-        $products=$filter->get();
-        return view('admin-panel/view_pro')->with(compact('pro_view','search','categories','products'));
+        elseif($search != ""){                
+               $pro_view=$filter->join('category','cat_id','=','category.cid')
+               ->where('pro_name','LIKE',"%$search%")
+               ->orWhere('cat_name','LIKE',"%$search%")
+               ->paginate(2);
+        }
+        $pro_view=$filter->paginate();
+        return view('admin-panel/view_pro')->with(compact('pro_view','search','categories'));
         
     }
+
 
     public function productDelete($id){
         $delete=product::find($id);

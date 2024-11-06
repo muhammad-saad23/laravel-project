@@ -35,7 +35,7 @@
 										<!-- product -->
 										<div class="product">
 											<div class="product-cat">
-												<img src="{{asset('images/'.$dc->cat_image)}}"  class="rounded" width="200px" height="200px" alt="">												
+												<img src="{{asset('images/'.$dc->cat_image)}}" class="rounded" width="200px" height="200px" alt="">												
 											</div>
 											<div class="product-body">
                                                 <h3 class="product-name">{{$dc->cat_name}}</h3>

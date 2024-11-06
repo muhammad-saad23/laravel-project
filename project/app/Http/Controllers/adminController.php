@@ -10,6 +10,7 @@ use App\Models\Admin;
 use App\Models\product;
 use App\Models\category;
 use App\Models\User;
+use App\Models\order;
 
 class adminController extends Controller
 {
@@ -18,12 +19,13 @@ class adminController extends Controller
         $category=category::count();
         $product=product::count();
         $user=User::count();
+        $orders=order::count();
 
         // $cat=category::get();
         $pro=DB::table('category')
         ->select('category.cat_name', DB::raw('(SELECT COUNT(*) FROM product WHERE category.cid = product.cat_id) as product_count'))
         ->get();            
-        return view('admin-panel.dashboard')->with(compact('category','product','user','pro'));
+        return view('admin-panel.dashboard')->with(compact('category','orders','product','user','pro'));
     }
     public function viewuser(Request $request){
         $userSearch=$request['usersearch']??"";
@@ -43,13 +45,14 @@ class adminController extends Controller
     }
 
     public function adminLogin(Request $request){
-            $admin=$request->validate([
+            $login=$request->validate([
             "email"=>"required|email",
             "password"=>"required",
         ]);            
         // $login=Admin::all();
             
-        if (Auth::attempt($admin)) {
+        if (Auth::attempt($login)) {     
+            session()->get('id');       
             return redirect ()->route('dashboard');
         }
         else {
@@ -61,7 +64,12 @@ class adminController extends Controller
     
     public function adminlogout(){        
         Auth::logout();
-        return view ('admin-panel.login');
+        session()->forget('id');
+        // $request->session()->invalidate();
+        // $request->session()->regenerateToken();
+
+        return redirect('admin-panel/login');
+        // return view('admin-panel.login');
 
     }
 
@@ -82,6 +90,11 @@ class adminController extends Controller
             
         }
 
+    }
+
+    public function orderdisplay(){
+        $order=order::all();
+        return view('admin-panel.orderdisplay')->with(compact('order'));
     }
 
     // public function search(Request $request){

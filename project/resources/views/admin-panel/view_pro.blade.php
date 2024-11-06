@@ -35,7 +35,7 @@
         <!-- search -->
                 <form action="" class=" mb-2 form-group" method="get">
                     <div class="row">
-                        <div class="col-8">
+                        <div class="col-8">                    
                             <input type="search" name="search" value="{{$search}}" class="form-control" placeholder="Search Products">
                         </div>      
                         <div class="col-2">                            
@@ -52,7 +52,7 @@
                 
                 <select class="my-2 " name="filter" id="filter" aria-label="Default select example">
 
-                 <option selected>Select Category</option>
+                 <option selected>All products</option>
                  @foreach ($categories as $f)
                  <option value="{{$f->cid}}">{{$f->cat_name}}</option>                     
                  @endforeach
@@ -61,14 +61,14 @@
                 <div id="filter_product"></div>
                 
         <table
-            class="table table-primary text-center"
+           id="product-table" class="table table-primary text-center"
         >
             <thead>
                 <tr class="table-dark fs-5">
                     <!-- <th scope="col">sno</th> -->
+                    <!-- <th scope="col">Category</th> -->
                     <th scope="col">Name</th>
                     <th scope="col">Price</th>
-                    <th scope="col">Category</th>
                     <!-- <th scope="col">Description</th> -->
                     <th scope="col">Image</th>
                     <th scope="col" colspan="3">Action</th>
@@ -76,14 +76,14 @@
             </thead>
             <tbody id="tbody">
                     
-                @forelse ($products as $p ) 
+                @forelse ($pro_view as $p ) 
                 
                     
                 <tr class="fs-5">
                     <!-- <td scope="row">{{$p->id}}</td> -->
+                    <!-- <td>{{$p->cat_name}}</td>    -->
                     <td scope="row">{{$p->pro_name}}</td>
                     <td>{{$p->pro_price}}</td>
-                    <td>{{$p->cat_name}}</td>
                     <!-- <td>{{$p->pro_des}}</td> -->
                     <td><img src="{{asset('images/'.$p->pro_image)}}" alt="" width="150px" heigh="150px"></td>
                     <td>
@@ -114,25 +114,43 @@ $(document).ready(function() {
         $.ajax({
             url: "{{route('viewproduct')}}",
             type: 'GET',
-            data: { 'filter': productId },
+            data: { 'category': productId },
             success: function(data) {
-                // var products=data.products;
-                // var html='';
-                // for (let i = 0; i < products.length; i++) {
-                //     html+='<tr>\
-                //     <td>'+products[i]['pro_name']+'</td>\
-                //     <td>'+products[i]['pro_price']+'</td>\
-                //     <td>'+products[i]['cat_name']+'</td>\
-                //     <td>'+products[i]['pro_image']+'</td>\
-                //     </tr>';                    
-                // }
-                // else{
-                //     html+='<tr>\
-                //     <td>No Products Found</td>\
-                //     </tr>';
-                // }
-                // $('#tbody').html(html);
+                var products=data.products;
+                var html='';
+                if (products.length>0) {
+                    
+                    for (let i = 0; i < products.length; i++) {
+                        html+='<tr class="fs-5">\
+                    <td>'+products[i]['cat_name']+'</td>\
+                    <td>'+products[i]['pro_name']+'</td>\
+                    <td>'+products[i]['pro_price']+'</td>\
+                    <td><img src="{{asset('images/'.'products[i]["pro_image"]')}}" alt="" width="150px" height="150px"></td>\
+                    </tr>';                    
+                    }
+
+                 }
+                else{
+                    html+='<tr>\
+                    <td colspan="12" class="fs-3">No Products Found</td>\
+                    </tr>';
+                } 
+                // Assuming the response contains an array of products
+
+                // var tableBody = $('#product-table tbody');
+                // tableBody.empty();
+
+                // $.each(products, function(i, products) {
+                //     var row = $('<tr></tr>');
+                //     row.append('<td>' + products.pro_name + '</td>');
+                //     row.append('<td>' + products.pro_price + '</td>');
+                //     row.append('<td><img src="{{ asset('images/' . '+products.pro_image+') }}" alt="" width="150px" height="150px"></td>');
+                //     tableBody.append(row);
+                // })
+                // $('#filter-product').html(data);
+
                 console.log(data);
+                $('#tbody').html(html);
             }
         });
     });

@@ -35,10 +35,10 @@ class CategoryController extends Controller
     public function categoryView(Request $request){
         $cat_search=$request['catsearch']??"";
         if ($cat_search != "") {
-            $view=category::where('cat_name','LIKE',"%$cat_search%")->paginate(2);            
+            $view=category::where('cat_name','LIKE',"%$cat_search%")->paginate();            
         }
         else {            
-            $view=category::paginate(2);
+            $view=category::paginate();
         }
         return view('admin-panel/viewcategory')->with(compact('view','cat_search'));
     }

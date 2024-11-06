@@ -22,7 +22,7 @@
 		</div>
 	</div>
 		@empty
-        <h2 class="text-center" style="display:flex; justify-content:center;align-items:center;height: 9em;">No Result Founds.</h2>							
+        <h2 class="text-center" style="display:flex; justify-content:center;align-items:center;height: 9em;font-size:3rem;">No Result Founds.</h2>							
 		@endforelse
 	</div>
 	<div class="row" style="display:flex;justify-content:center;">

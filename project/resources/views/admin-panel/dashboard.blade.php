@@ -20,6 +20,18 @@
 
             
         </div>
+        <div class="col-lg-4 col-md-6 ">
+
+            <div class="card bg-primary mb-3" style="max-width: 18rem;">
+              <div class="card-body ">
+                <h4 class="card-title text-white" >Total Orders</h4>
+                <h5  class="card-title  text-white">{{$orders}}</h5>
+              </div>
+              <a class="card-footer bg-transparent text-white" href="{{route('orderdisplay')}}">View Orders</a>
+            </div>
+
+            
+        </div>
         <div class="col-lg-4 col-md-6">
 
         <div class="card bg-danger  mb-3" style="max-width: 18rem;">

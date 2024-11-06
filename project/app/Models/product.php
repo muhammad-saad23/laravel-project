@@ -15,4 +15,9 @@ class product extends Model
     public function category(){
         return $this->belongsTo(category::class);
     }
+
+    public function setPriceAttribute($value)
+    {
+        $this->attributes['price'] = intval($value);
+    }
 }
